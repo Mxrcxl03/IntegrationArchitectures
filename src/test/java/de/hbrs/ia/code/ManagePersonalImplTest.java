@@ -1,15 +1,14 @@
 package de.hbrs.ia.code;
 
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import de.hbrs.ia.model.SalesMan;
 import de.hbrs.ia.model.SocialPerformanceRecord;
-import de.hbrs.ia.code.ManagePersonalImpl;
 
 import java.util.List;
 
@@ -18,10 +17,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class ManagePersonalImplTest {
 
     private ManagePersonalImpl managePersonal;
+    private MongoClient client;
+    private MongoDatabase supermongo;
 
     @BeforeEach
     void setUp() {
-        managePersonal = new ManagePersonalImpl();
+        client = new MongoClient("localhost", 27017);
+        supermongo = client.getDatabase("SmartHooverLTD");
+        managePersonal = new ManagePersonalImpl(supermongo);
     }
 
     @AfterEach
@@ -36,7 +39,7 @@ class ManagePersonalImplTest {
         managePersonal.createSalesMan(salesMan);
         Document doc = managePersonal.readSalesMan(salesMan.getId()).toDocument();
         //System.out.println("Retrieved document: " + (doc != null ? doc.toJson() : "null"));
-        assertNotNull(doc);
+        Assertions.assertNotNull(doc);
         assertEquals("John", doc.getString("firstname"));
         assertEquals("Doe", doc.getString("lastname"));
     }
@@ -62,7 +65,7 @@ class ManagePersonalImplTest {
         managePersonal.createSalesMan(salesMan);
 
         SalesMan retrievedSalesMan = managePersonal.readSalesMan(67890);
-        assertNotNull(retrievedSalesMan);
+        Assertions.assertNotNull(retrievedSalesMan);
         assertEquals("Alice", retrievedSalesMan.getFirstname());
         assertEquals("Smith", retrievedSalesMan.getLastname());
     }
@@ -98,7 +101,7 @@ class ManagePersonalImplTest {
         managePersonal.createSalesMan(salesMan);
 
         managePersonal.deleteSalesMan(44444);
-        assertNull(managePersonal.readSalesMan(44444));
+        Assertions.assertNull(managePersonal.readSalesMan(44444));
     }
 
     @Test
