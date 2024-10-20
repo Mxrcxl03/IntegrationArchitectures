@@ -33,10 +33,13 @@ public class ManagePersonalImpl implements ManagePersonal {
 
         @Override
         public void addSocialPerformanceRecord(SocialPerformanceRecord record, SalesMan salesMan) {
+            record.setgoalId(salesMan.getId());
             Document document = new Document();
-            document.append("performance" , record.getPerformance());
+            document.append("goalId" , record.getgoalId());
+            document.append("goalDesc", record.getgoalDesc());
+            document.append("value" , record.getvalue());
+            document.append("actualValue" , record.getactualValue());
             document.append("year" , record.getYear());
-            document.append("sid", salesMan.getId()); // Hier wird die salesmanId hinzugefügt
             socialperformancecollection.insertOne(document);
             System.out.println("Inserted document: " + document.toJson());
         }
@@ -64,8 +67,8 @@ public class ManagePersonalImpl implements ManagePersonal {
         @Override
         public List<SocialPerformanceRecord> readSocialPerformanceRecord(SalesMan salesMan) {
             List<SocialPerformanceRecord> records = new ArrayList<>();
-            for (Document doc : socialperformancecollection.find(new Document("sid", salesMan.getId()))) {
-                records.add(new SocialPerformanceRecord(doc.getString("year"), doc.getInteger("performance")));
+            for (Document doc : socialperformancecollection.find(new Document("goalId", salesMan.getId()))) {
+                records.add(new SocialPerformanceRecord(doc.getInteger("goalId"), doc.getString("goalDesc"), doc.getInteger("year"), doc.getInteger("value"), doc.getInteger("actualValue")));
             }
             return records;
         }
@@ -78,9 +81,8 @@ public class ManagePersonalImpl implements ManagePersonal {
         @Override
         public void deleteSocialPerformanceRecord(SocialPerformanceRecord record, SalesMan salesMan) {
             socialperformancecollection.deleteOne(
-                    new Document("year", record.getYear())
-                    .append("performance", record.getPerformance())
-                    .append("sid", salesMan.getId())); // salesMan wird benötigt, um die Zuordnung herzustellen
+                    new Document("year", record.getYear()).append("goalId", record.getgoalId()).append("goalDesc", record.getgoalDesc())
+                    .append("value", record.getvalue()).append("actualValue", record.getactualValue())); // salesMan wird benötigt, um die Zuordnung herzustellen
         }
 
         public void deleteAll() {

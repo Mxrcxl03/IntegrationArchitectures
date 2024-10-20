@@ -2,32 +2,64 @@ package de.hbrs.ia.model;
 
 import org.bson.Document;
 
-public class SocialPerformanceRecord {
-    private String year;
-    private Integer performance;
+import java.sql.SQLIntegrityConstraintViolationException;
 
-    public SocialPerformanceRecord(String year, Integer performance) {
+public class SocialPerformanceRecord {
+    private Integer year;
+    private Integer goalId;
+    private String goalDesc;
+    private Integer value;
+    private Integer actualValue;
+
+    public SocialPerformanceRecord(Integer goalId, String goalDesc, Integer year, Integer value, Integer actualValue) {
         this.year = year;
-        this.performance = performance;
+        this.value = value;
+        this.actualValue = actualValue;
+        this.goalDesc = goalDesc;
+        this.goalId = goalId;
     }
 
-    public String getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public void setYear(String year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 
-    public Integer getPerformance() {
-        return performance;
+    public Integer getvalue() {
+        return value;
     }
 
-    public void setPerformance(Integer performance) {
-        this.performance = performance;
+    public void setvalue(Integer value) {
+        this.value = value;
+    }
+
+    public Integer getactualValue() {
+        return actualValue;
+    }
+
+    public void setactualValue(Integer actualValue) {
+        this.actualValue = actualValue;
+    }
+
+    public String getgoalDesc() {
+        return goalDesc;
+    }
+
+    public void setgoalDesc(String goalDesc) {
+        this.goalDesc = goalDesc;
+    }
+
+    public Integer getgoalId() {
+        return goalId;
+    }
+
+    public void setgoalId(Integer goalId) {
+        this.goalId = goalId;
     }
 
     public Document toDocument() {
-        return new Document("year", this.year).append("performance", this.performance);
+        return new Document ("goalId", this.goalId).append("goalDesc", this.goalDesc).append("year", this.year).append("value", this.value).append("actualValue", this.actualValue);
     }
 }

@@ -5,7 +5,7 @@ import org.bson.Document;
 public class SalesMan {
     private String firstname;
     private String lastname;
-    private Integer sid;
+    private Integer sid = 1;
 
     public SalesMan(String firstname, String lastname, Integer sid) {
         this.firstname = firstname;
