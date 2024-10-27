@@ -24,10 +24,11 @@ public class ManagePersonalImpl implements ManagePersonal {
         // Methode zum Erstellen eines neuen SalesMan-Dokuments in der Datenbank
         @Override
         public void createSalesMan(SalesMan salesMan) {
-            Document document = new Document();
-            document.append("firstname" , salesMan.getFirstname());
-            document.append("lastname" , salesMan.getLastname());
-            document.append("sid" , salesMan.getId());
+            Document filter = new Document("sid",salesMan.getId());
+            Document salesman = salesmencollection.find(filter).first();
+            if (salesman != null) {System.out.println("salesman with sid" + salesMan.getId() + "already exists");
+            return ;}
+            Document document = salesMan.toDocument();
             // Speichern des Dokuments in der Collection
             salesmencollection.insertOne(document);
             System.out.println("Inserted document: " + document.toJson()); // Debugging-Ausgabe zur Bestätigung
@@ -37,12 +38,8 @@ public class ManagePersonalImpl implements ManagePersonal {
         @Override
         public void addSocialPerformanceRecord(SocialPerformanceRecord record, SalesMan salesMan) {
             record.setgoalId(salesMan.getId());
-            Document document = new Document();
-            document.append("goalId" , record.getgoalId());
-            document.append("goalDesc", record.getgoalDesc());
-            document.append("value" , record.getvalue());
-            document.append("actualValue" , record.getactualValue());
-            document.append("year" , record.getYear());
+            salesMan.addSPR(record);
+            Document document = record.toDocument();
             socialperformancecollection.insertOne(document);
             System.out.println("Inserted document: " + document.toJson()); // Debugging-Ausgabe
         }
@@ -77,7 +74,7 @@ public class ManagePersonalImpl implements ManagePersonal {
             List<SocialPerformanceRecord> records = new ArrayList<>();
             // Suche nach SocialPerformanceRecords basierend auf der SalesMan-ID
             for (Document doc : socialperformancecollection.find(new Document("goalId", salesMan.getId()))) {
-                records.add(new SocialPerformanceRecord(doc.getInteger("goalId"), doc.getString("goalDesc"), doc.getInteger("year"), doc.getInteger("value"), doc.getInteger("actualValue")));
+                records.add(new SocialPerformanceRecord(doc.getInteger("goalId"), doc.getInteger("year"), doc.getInteger("value"), doc.getInteger("actualValue")));
             }
             return records;
         }
@@ -92,8 +89,9 @@ public class ManagePersonalImpl implements ManagePersonal {
         @Override
         public void deleteSocialPerformanceRecord(SocialPerformanceRecord record, SalesMan salesMan) {
             socialperformancecollection.deleteOne(
-                    new Document("year", record.getYear()).append("goalId", record.getgoalId()).append("goalDesc", record.getgoalDesc())
-                    .append("value", record.getvalue()).append("actualValue", record.getactualValue())); // salesMan wird benötigt, um die Zuordnung herzustellen
+                    new Document("year", record.getYear()).append("goalId", record.getgoalId())
+                    .append("value", record.getvalue()).append("actualValue", record.getactualValue()));// salesMan wird benötigt, um die Zuordnung herzustellen
+                    salesMan.delete(record);
         }
 
         // Methode zum Löschen aller Dokumente aus beiden Sammlungen
