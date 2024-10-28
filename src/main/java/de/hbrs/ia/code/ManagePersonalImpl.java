@@ -74,7 +74,7 @@ public class ManagePersonalImpl implements ManagePersonal {
             List<SocialPerformanceRecord> records = new ArrayList<>();
             // Suche nach SocialPerformanceRecords basierend auf der SalesMan-ID
             for (Document doc : socialperformancecollection.find(new Document("goalId", salesMan.getId()))) {
-                records.add(new SocialPerformanceRecord(doc.getInteger("goalId"), doc.getInteger("year"), doc.getInteger("value"), doc.getInteger("actualValue")));
+                records.add(new SocialPerformanceRecord(doc.getInteger("goalId"), doc.getInteger("year")));
             }
             return records;
         }

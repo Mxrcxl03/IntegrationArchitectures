@@ -3,26 +3,26 @@ package de.hbrs.ia.model;
 import org.bson.Document;
 
 public class SpecifiedSocialPerformanceRecord {
-    private short targetValue;
-    private short actualValue;
-    private short bonus;
+    private Integer targetValue;
+    private Integer actualValue;
+    private Integer bonus;
     private String name;
 
-    public SpecifiedSocialPerformanceRecord(short targetValue, short actualValue, short bonus) {
+    public SpecifiedSocialPerformanceRecord(int targetValue, int actualValue, int bonus) {
         this.targetValue = targetValue;
         this.actualValue = actualValue;
         this.bonus = bonus;
     }
 
-    public short getActualValue() {
+    public int getActualValue() {
         return actualValue;
     }
 
-    public short getBonus() {
+    public int getBonus() {
         return bonus;
     }
 
-    public short getTargetValue() {
+    public int getTargetValue() {
         return targetValue;
     }
 

@@ -41,7 +41,11 @@ public class SalesMan {
     }
 
     public void addSPR(SocialPerformanceRecord SPR) {
-        this.SPR.add(SPR);
+        if (this.SPR == null) {
+
+        }else {
+            this.SPR.add(SPR);
+        }
     }
 
     public void clearSPR() {

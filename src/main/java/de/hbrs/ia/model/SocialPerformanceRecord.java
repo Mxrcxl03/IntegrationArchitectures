@@ -7,16 +7,17 @@ import java.util.List;
 public class SocialPerformanceRecord {
     private Integer year;
     private Integer goalId;
-    private short value;
-    private short actualValue;
+    private Integer value;
+    private Integer actualValue;
     private List<SpecifiedSocialPerformanceRecord> SSPR;
 
-    public SocialPerformanceRecord(Integer goalId, Integer year, Integer value, Integer actualValue) {
+    public SocialPerformanceRecord(Integer goalId, Integer year) {
         this.year = year;
         this.value = averageTargetValue();
         this.actualValue = averageActualValue();
         this.goalId = goalId;
     }
+
 
     public Integer getYear() {
         return year;
@@ -26,19 +27,19 @@ public class SocialPerformanceRecord {
         this.year = year;
     }
 
-    public short getvalue() {
+    public Integer getvalue() {
         return value;
     }
 
-    public void setvalue(short value) {
+    public void setvalue(int value) {
         this.value = value;
     }
 
-    public short getactualValue() {
+    public int getactualValue() {
         return actualValue;
     }
 
-    public void setactualValue(short actualValue) {
+    public void setactualValue(int actualValue) {
         this.actualValue = actualValue;
     }
 
@@ -50,52 +51,60 @@ public class SocialPerformanceRecord {
         this.goalId = goalId;
     }
 
-    public short averageActualValue() {
-        short x = 0;
-        for (SpecifiedSocialPerformanceRecord specifiedSocialPerformanceRecord : SSPR) {
-            x += specifiedSocialPerformanceRecord.getActualValue();
+    public Integer averageActualValue() {
+        int x = 0;
+        if (SSPR == null){
+            return 0;
+        }else {
+            for (SpecifiedSocialPerformanceRecord specifiedSocialPerformanceRecord : SSPR) {
+                x += specifiedSocialPerformanceRecord.getActualValue();
+            }
+            return  (x / (SSPR.size()));
         }
-        return (short) (x / (SSPR.size()));
     }
 
-    public short averageTargetValue() { //rundung fehlt
-        short x = 0;
-        for (SpecifiedSocialPerformanceRecord specifiedSocialPerformanceRecord : SSPR) {
-            x += specifiedSocialPerformanceRecord.getTargetValue();
+    public Integer averageTargetValue() { //rundung fehlt
+        int x = 0;
+        if (SSPR == null){
+            return 0;
+        }else {
+            for (SpecifiedSocialPerformanceRecord specifiedSocialPerformanceRecord : SSPR) {
+                x += specifiedSocialPerformanceRecord.getTargetValue();
+            }
+            return  (x / (SSPR.size()));
         }
-        return (short) (x / (SSPR.size()));
     }
 
     public Document toDocument() {
         return new Document ("goalId", this.goalId).append("year", this.year).append("value", this.value).append("actualValue", this.actualValue).append("SSPR", this.SSPR);
     }
 
-    public void addLeadershipCompetence(short targetValue, short actualValue, short bonus){
+    public void addLeadershipCompetence(int targetValue, int actualValue, int bonus){
         SpecifiedSocialPerformanceRecord LeadershipCompetence = new SpecifiedSocialPerformanceRecord(targetValue, actualValue, bonus);
         SSPR.add(LeadershipCompetence);
         LeadershipCompetence.setName("Leadership Competence");
     }
-    public void addOpenessToEmployee(short targetValue, short actualValue, short bonus){
+    public void addOpenessToEmployee(int targetValue, int actualValue, int bonus){
         SpecifiedSocialPerformanceRecord LeadershipCompetence = new SpecifiedSocialPerformanceRecord(targetValue, actualValue, bonus);
         SSPR.add(LeadershipCompetence);
         LeadershipCompetence.setName("Openess to Employee");
     }
-    public void addSocialBehaviourToEmployee(short targetValue, short actualValue, short bonus){
+    public void addSocialBehaviourToEmployee( int targetValue, int actualValue, int bonus){
         SpecifiedSocialPerformanceRecord LeadershipCompetence = new SpecifiedSocialPerformanceRecord(targetValue, actualValue, bonus);
         SSPR.add(LeadershipCompetence);
         LeadershipCompetence.setName("Behaviour to Employee");
     }
-    public void addAttitudesTowardsClient(short targetValue, short actualValue, short bonus){
+    public void addAttitudesTowardsClient(int targetValue, int actualValue, int bonus){
         SpecifiedSocialPerformanceRecord LeadershipCompetence = new SpecifiedSocialPerformanceRecord(targetValue, actualValue, bonus);
         SSPR.add(LeadershipCompetence);
         LeadershipCompetence.setName("Attitude towards Client");
     }
-    public void addCommunicationSkills(short targetValue, short actualValue, short bonus){
+    public void addCommunicationSkills(int targetValue, int actualValue, int bonus){
         SpecifiedSocialPerformanceRecord LeadershipCompetence = new SpecifiedSocialPerformanceRecord(targetValue, actualValue, bonus);
         SSPR.add(LeadershipCompetence);
         LeadershipCompetence.setName("Communication Skills");
     }
-    public void addIntegrityToCompany(short targetValue, short actualValue, short bonus){
+    public void addIntegrityToCompany(int targetValue, int actualValue, int bonus){
         SpecifiedSocialPerformanceRecord LeadershipCompetence = new SpecifiedSocialPerformanceRecord(targetValue, actualValue, bonus);
         SSPR.add(LeadershipCompetence);
         LeadershipCompetence.setName("Integrity To Company");

@@ -2,6 +2,7 @@ package de.hbrs.ia.code;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
+import de.hbrs.ia.model.SpecifiedSocialPerformanceRecord;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -53,8 +54,9 @@ class ManagePersonalImplTest {
         managePersonal.createSalesMan(salesMan);
         managePersonal.createSalesMan(salesMan2);
 
-        SocialPerformanceRecord record = new SocialPerformanceRecord(54321, "Leadership Competence", 2024, 100, 2); // Erstellen eines neuen SocialPerformanceRecord
-        SocialPerformanceRecord record2 = new SocialPerformanceRecord(55555, "Leadership Competence", 2024, 100, 2);
+        SocialPerformanceRecord record = new SocialPerformanceRecord(54321,  2024); // Erstellen eines neuen SocialPerformanceRecord
+        SocialPerformanceRecord record2 = new SocialPerformanceRecord(55555,  2024);
+
         managePersonal.addSocialPerformanceRecord(record, salesMan);
         managePersonal.addSocialPerformanceRecord(record2, salesMan);
 
@@ -62,11 +64,10 @@ class ManagePersonalImplTest {
         //System.out.println(records);
         assertEquals(2, records.size()); // Überprüfen, ob zwei Records existiert
         assertEquals(2024, records.get(0).getYear()); // Überprüfen, ob das Jahr korrekt ist
-        assertEquals(100, records.get(0).getvalue());
-        assertEquals(2, records.get(0).getactualValue());
+        assertEquals(0, records.get(0).getvalue());
+        assertEquals(0, records.get(0).getactualValue());
         assertEquals(54321, records.get(0).getgoalId());
         assertEquals(54321, records.get(1).getgoalId());
-        assertEquals("Leadership Competence", records.get(0).getgoalDesc());
     }
 
     // Testet das Abrufen eines SalesMan anhand seiner ID
@@ -99,7 +100,7 @@ class ManagePersonalImplTest {
         SalesMan salesMan = new SalesMan("Charlie", "Green", 33333);
         managePersonal.createSalesMan(salesMan);
 
-        SocialPerformanceRecord record = new SocialPerformanceRecord(33333, "Attitude towards Client", 2024, 150,2);
+        SocialPerformanceRecord record = new SocialPerformanceRecord(33333, 2024);
         managePersonal.addSocialPerformanceRecord(record, salesMan);
 
         List<SocialPerformanceRecord> records = managePersonal.readSocialPerformanceRecord(salesMan);
@@ -107,7 +108,6 @@ class ManagePersonalImplTest {
         assertEquals(2024, records.get(0).getYear());
         assertEquals(150, records.get(0).getvalue());
         assertEquals(2, records.get(0).getactualValue());
-        assertEquals("Attitude towards Client", records.get(0).getgoalDesc());
         assertEquals(33333, records.get(0).getgoalId());
     }
 
@@ -127,7 +127,7 @@ class ManagePersonalImplTest {
         SalesMan salesMan = new SalesMan("Frank", "Blue", 55555);
         managePersonal.createSalesMan(salesMan);
 
-        SocialPerformanceRecord record = new SocialPerformanceRecord(55555, "Openness to Employee",2024, 200,2);
+        SocialPerformanceRecord record = new SocialPerformanceRecord(55555, 2024);
         managePersonal.addSocialPerformanceRecord(record, salesMan);
 
         managePersonal.deleteSocialPerformanceRecord(record, salesMan);
