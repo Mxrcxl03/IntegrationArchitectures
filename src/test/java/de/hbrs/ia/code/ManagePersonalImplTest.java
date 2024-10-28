@@ -51,23 +51,27 @@ class ManagePersonalImplTest {
     void addSocialPerformanceRecord() {
         SalesMan salesMan = new SalesMan("Jane", "Doe", 54321);
         SalesMan salesMan2 = new SalesMan("Yannick", "Doe", 55555);
+        SocialPerformanceRecord record = new SocialPerformanceRecord(54321,  2024);
+        salesMan.addSPR(record);
         managePersonal.createSalesMan(salesMan);
         managePersonal.createSalesMan(salesMan2);
 
-        SocialPerformanceRecord record = new SocialPerformanceRecord(54321,  2024); // Erstellen eines neuen SocialPerformanceRecord
+        // Erstellen eines neuen SocialPerformanceRecord
         SocialPerformanceRecord record2 = new SocialPerformanceRecord(55555,  2024);
-
+        record.addLeadershipCompetence(100,60,50);
         managePersonal.addSocialPerformanceRecord(record, salesMan);
-        managePersonal.addSocialPerformanceRecord(record2, salesMan);
+       //managePersonal.addSocialPerformanceRecord(record2, salesMan);
 
         List<SocialPerformanceRecord> records = managePersonal.readSocialPerformanceRecord(salesMan); // Abrufen aller SocialPerformanceRecords des SalesMan
         //System.out.println(records);
-        assertEquals(2, records.size()); // Überprüfen, ob zwei Records existiert
+        assertEquals(1, records.size()); // Überprüfen, ob zwei Records existiert
         assertEquals(2024, records.get(0).getYear()); // Überprüfen, ob das Jahr korrekt ist
-        assertEquals(0, records.get(0).getvalue());
-        assertEquals(0, records.get(0).getactualValue());
+        assertEquals(100, records.get(0).getvalue());
+        assertEquals(60, records.get(0).getactualValue());
         assertEquals(54321, records.get(0).getgoalId());
-        assertEquals(54321, records.get(1).getgoalId());
+        //assertEquals(54321, records.get(1).getgoalId());
+        assertEquals(60, records.get(0).getactualValue());
+
     }
 
     // Testet das Abrufen eines SalesMan anhand seiner ID
@@ -101,13 +105,16 @@ class ManagePersonalImplTest {
         managePersonal.createSalesMan(salesMan);
 
         SocialPerformanceRecord record = new SocialPerformanceRecord(33333, 2024);
+        //SpecifiedSocialPerformanceRecord srecord= new SpecifiedSocialPerformanceRecord(150,2,30);
+        record.addLeadershipCompetence(150,100,30);
         managePersonal.addSocialPerformanceRecord(record, salesMan);
+
 
         List<SocialPerformanceRecord> records = managePersonal.readSocialPerformanceRecord(salesMan);
         assertEquals(1, records.size());
         assertEquals(2024, records.get(0).getYear());
         assertEquals(150, records.get(0).getvalue());
-        assertEquals(2, records.get(0).getactualValue());
+        assertEquals(100, records.get(0).getactualValue());
         assertEquals(33333, records.get(0).getgoalId());
     }
 

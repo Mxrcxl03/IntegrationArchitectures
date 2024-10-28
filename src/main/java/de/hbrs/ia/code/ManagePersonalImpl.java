@@ -39,6 +39,8 @@ public class ManagePersonalImpl implements ManagePersonal {
         public void addSocialPerformanceRecord(SocialPerformanceRecord record, SalesMan salesMan) {
             record.setgoalId(salesMan.getId());
             salesMan.addSPR(record);
+            record.setvalue(record.averageTargetValue());
+            record.setactualValue(record.averageActualValue());
             Document document = record.toDocument();
             socialperformancecollection.insertOne(document);
             System.out.println("Inserted document: " + document.toJson()); // Debugging-Ausgabe
@@ -69,12 +71,15 @@ public class ManagePersonalImpl implements ManagePersonal {
         }
 
         // Methode zum Lesen der SocialPerformanceRecords eines bestimmten SalesMan
+
         @Override
         public List<SocialPerformanceRecord> readSocialPerformanceRecord(SalesMan salesMan) {
             List<SocialPerformanceRecord> records = new ArrayList<>();
-            // Suche nach SocialPerformanceRecords basierend auf der SalesMan-ID
             for (Document doc : socialperformancecollection.find(new Document("goalId", salesMan.getId()))) {
-                records.add(new SocialPerformanceRecord(doc.getInteger("goalId"), doc.getInteger("year")));
+                SocialPerformanceRecord record = new SocialPerformanceRecord(doc.getInteger("goalId"), doc.getInteger("year"));
+                record.setvalue(doc.getInteger("value")); // Setzen von value aus dem Dokument
+                record.setactualValue(doc.getInteger("actualValue")); // Setzen von actualValue aus dem Dokument
+                records.add(record);
             }
             return records;
         }

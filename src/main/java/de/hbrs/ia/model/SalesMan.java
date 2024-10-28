@@ -2,6 +2,7 @@ package de.hbrs.ia.model;
 
 import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SalesMan {
@@ -14,6 +15,7 @@ public class SalesMan {
         this.firstname = firstname;
         this.lastname = lastname;
         this.sid = sid;
+
     }
 
     public String getFirstname() {
@@ -61,7 +63,11 @@ public class SalesMan {
         return document;
     }
 
-    public void delete(SocialPerformanceRecord spr) {
-        this.SPR.remove(spr);
+    public void delete(SocialPerformanceRecord record) {
+        if (SPR == null) {
+            SPR = new ArrayList<>(); // Initialisieren, falls null
+        }
+        SPR.remove(record);
     }
+
 }
